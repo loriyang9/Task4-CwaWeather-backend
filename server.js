@@ -6,7 +6,6 @@ const axios = require("axios");
 const app = express();
 const PORT = process.env.PORT || 3000;
 
-// 請確認這裡有拿到 Key，如果沒有會印出警告
 const CWA_API_BASE_URL = "https://opendata.cwa.gov.tw/api";
 const CWA_API_KEY = process.env.CWA_API_KEY;
 
@@ -56,7 +55,7 @@ function findNearestCity(lat, lon) {
 const getWeather = async (req, res) => {
   try {
     if (!CWA_API_KEY) {
-      return res.status(500).json({ error: "Server Error: API Key is missing in environment variables." });
+      return res.status(500).json({ error: "Server API Key Missing" });
     }
 
     let targetCityName = "臺北市";
@@ -70,94 +69,95 @@ const getWeather = async (req, res) => {
 
     console.log(`📡 正在請求城市: ${targetCityName}`);
 
-    // 呼叫 API：F-D0047-091 (鄉鎮未來1週天氣預報)
+    // 使用 F-D0047-091 (一週預報)
     const response = await axios.get(
       `${CWA_API_BASE_URL}/v1/rest/datastore/F-D0047-091`,
       {
         params: {
           Authorization: CWA_API_KEY,
-          locationName: targetCityName,
-          elementName: "Wx,T,PoP6h,PoP12h",
+          elementName: "天氣現象,平均溫度,12小時降雨機率", // 使用中文名稱請求
           sort: "time"
         },
-        timeout: 8000 // 設定超時避免卡死
+        timeout: 8000
       }
     );
 
-    // ★ 除錯重點：檢查資料結構是否存在
-    // 使用 Optional Chaining (?.) 避免伺服器當機
-    const locations = response.data?.records?.locations;
+    // ★ 關鍵修正 1：處理大小寫與結構 (Locations vs locations)
+    const records = response.data?.records;
+    const rawLocations = records?.Locations || records?.locations;
 
-    if (!locations || !locations[0]) {
-      // 如果拿不到資料，印出 API 回傳了什麼，方便除錯
-      console.error("❌ CWA API 回傳格式不如預期:", JSON.stringify(response.data));
-      return res.status(502).json({ error: "無法從氣象局取得資料，請檢查 API Key 或配額。" });
+    if (!rawLocations || !rawLocations[0]) {
+      console.error("❌ CWA API 回傳結構異常", JSON.stringify(response.data).substring(0, 200));
+      return res.status(502).json({ error: "API Response Error" });
     }
 
-    // 取得第一個地點（通常是該城市的第一個行政區，例如松山區）
-    // F-D0047-091 回傳的是該縣市的所有鄉鎮，我們取第一個作為代表
-    const locationData = locations[0].location?.[0];
+    // ★ 關鍵修正 2：在陣列中尋找城市 (Location vs location)
+    // 氣象局回傳的是所有縣市的列表，我們必須用 find 找對應的城市
+    const citiesList = rawLocations[0].Location || rawLocations[0].location;
+
+    let locationData = citiesList.find(c => c.LocationName === targetCityName);
+
+    // 找不到時的備案 (例如找 "新竹市" 但 API 只給 "新竹縣")
+    if (!locationData) {
+      console.log(`⚠️ 找不到 ${targetCityName}，嘗試模糊搜尋...`);
+      locationData = citiesList.find(c => targetCityName.includes(c.LocationName) || c.LocationName.includes(targetCityName.substring(0, 2)));
+    }
 
     if (!locationData) {
-      console.error("❌ 找不到該地點的 location 資料");
-      return res.status(404).json({ error: `找不到 ${targetCityName} 的天氣資料` });
+      // 真的找不到，就拿列表第一個當預設值，避免當機
+      console.error(`❌ 真的找不到 ${targetCityName}，使用預設資料`);
+      locationData = citiesList[0];
     }
 
-    // 整理資料
-    const elements = locationData.weatherElement.reduce((acc, curr) => {
-      acc[curr.elementName] = curr.time;
+    // ★ 關鍵修正 3：對應中文欄位名稱
+    // API 回傳的是: "天氣現象", "平均溫度", "12小時降雨機率"
+    const elements = locationData.WeatherElement.reduce((acc, curr) => {
+      acc[curr.ElementName] = curr.Time;
       return acc;
     }, {});
 
     const forecasts = [];
-    const limit = 24;
+    // 我們以 "天氣現象" 的時間軸為基準
+    const timeSteps = elements["天氣現象"] || [];
+    const limit = 20; // 取前 20 筆資料
 
-    if (elements["Wx"]) {
-      for (let i = 0; i < Math.min(elements["Wx"].length, limit); i++) {
-        const wxTime = elements["Wx"][i];
-        const startTime = wxTime.startTime;
-        const endTime = wxTime.endTime;
+    for (let i = 0; i < Math.min(timeSteps.length, limit); i++) {
+      const step = timeSteps[i];
+      const startTime = step.StartTime;
+      const endTime = step.EndTime;
 
-        // 找溫度
-        const tempObj = (elements["T"] || []).find(t => t.dataTime === startTime);
-        const temp = tempObj ? tempObj.elementValue[0].value : "--";
+      // 1. 取得天氣 (Key: Weather)
+      const weather = step.ElementValue[0].Weather;
 
-        // 找降雨率
-        let rain = "0";
-        const checkTime = (p) => (new Date(startTime) >= new Date(p.startTime) && new Date(endTime) <= new Date(p.endTime));
+      // 2. 取得溫度 (Key: Temperature)
+      // 需對應時間
+      const tempStep = (elements["平均溫度"] || []).find(t => t.StartTime === startTime);
+      const temp = tempStep ? tempStep.ElementValue[0].Temperature : "--";
 
-        const pop6 = (elements["PoP6h"] || []).find(checkTime);
-        const pop12 = (elements["PoP12h"] || []).find(checkTime);
+      // 3. 取得降雨機率 (Key: ProbabilityOfPrecipitation)
+      const rainStep = (elements["12小時降雨機率"] || []).find(t => t.StartTime === startTime);
+      let rain = rainStep ? rainStep.ElementValue[0].ProbabilityOfPrecipitation : "0";
+      if (rain === " " || rain === "-") rain = "0"; // 處理空值
 
-        if (pop6) rain = pop6.elementValue[0].value;
-        else if (pop12) rain = pop12.elementValue[0].value;
-
-        if (rain === " ") rain = "0";
-
-        forecasts.push({
-          startTime: startTime,
-          weather: wxTime.elementValue[0].value,
-          temp: temp,
-          rain: rain + "%"
-        });
-      }
+      forecasts.push({
+        startTime: startTime,
+        endTime: endTime,
+        weather: weather,
+        temp: temp,
+        rain: rain + "%"
+      });
     }
 
-    console.log(`✅ 成功取得資料，共 ${forecasts.length} 筆`);
+    console.log(`✅ 成功回傳 ${targetCityName} 資料，共 ${forecasts.length} 筆`);
 
     res.json({
       success: true,
-      city: targetCityName,
-      data: { city: targetCityName, forecasts: forecasts }
+      city: locationData.LocationName, // 回傳實際抓到的城市名稱
+      data: { city: locationData.LocationName, forecasts: forecasts }
     });
 
   } catch (error) {
     console.error("❌ 伺服器錯誤:", error.message);
-    // 印出詳細錯誤給 Zeabur Log
-    if (error.response) {
-      console.error("CWA Error Status:", error.response.status);
-      console.error("CWA Error Data:", JSON.stringify(error.response.data));
-    }
     res.status(500).json({ error: "Backend Error", details: error.message });
   }
 };
