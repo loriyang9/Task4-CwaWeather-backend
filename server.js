@@ -6,8 +6,13 @@ const axios = require("axios");
 const app = express();
 const PORT = process.env.PORT || 3000;
 
+// 請確認這裡有拿到 Key，如果沒有會印出警告
 const CWA_API_BASE_URL = "https://opendata.cwa.gov.tw/api";
 const CWA_API_KEY = process.env.CWA_API_KEY;
+
+if (!CWA_API_KEY) {
+  console.error("⚠️ 警告：系統偵測不到 CWA_API_KEY，請至 Zeabur 設定環境變數！");
+}
 
 app.use(cors());
 app.use(express.json());
@@ -48,10 +53,11 @@ function findNearestCity(lat, lon) {
   return nearest.name;
 }
 
-// === 天氣邏輯 (使用 F-D0047-091 未來一週資料) ===
 const getWeather = async (req, res) => {
   try {
-    if (!CWA_API_KEY) return res.status(500).json({ error: "API Key Missing" });
+    if (!CWA_API_KEY) {
+      return res.status(500).json({ error: "Server Error: API Key is missing in environment variables." });
+    }
 
     let targetCityName = "臺北市";
     if (req.query.lat && req.query.lon) {
@@ -62,8 +68,9 @@ const getWeather = async (req, res) => {
       else if (req.params.city === "kaohsiung") targetCityName = "高雄市";
     }
 
+    console.log(`📡 正在請求城市: ${targetCityName}`);
+
     // 呼叫 API：F-D0047-091 (鄉鎮未來1週天氣預報)
-    // 我們抓取：Wx(天氣現象), T(溫度), PoP6h(6小時降雨率), PoP12h(12小時降雨率)
     const response = await axios.get(
       `${CWA_API_BASE_URL}/v1/rest/datastore/F-D0047-091`,
       {
@@ -73,50 +80,70 @@ const getWeather = async (req, res) => {
           elementName: "Wx,T,PoP6h,PoP12h",
           sort: "time"
         },
+        timeout: 8000 // 設定超時避免卡死
       }
     );
 
-    const locationData = response.data.records.locations[0].location[0];
-    if (!locationData) return res.status(404).json({ error: "No Data" });
+    // ★ 除錯重點：檢查資料結構是否存在
+    // 使用 Optional Chaining (?.) 避免伺服器當機
+    const locations = response.data?.records?.locations;
 
-    // 整理資料：將各個天氣因子合併
+    if (!locations || !locations[0]) {
+      // 如果拿不到資料，印出 API 回傳了什麼，方便除錯
+      console.error("❌ CWA API 回傳格式不如預期:", JSON.stringify(response.data));
+      return res.status(502).json({ error: "無法從氣象局取得資料，請檢查 API Key 或配額。" });
+    }
+
+    // 取得第一個地點（通常是該城市的第一個行政區，例如松山區）
+    // F-D0047-091 回傳的是該縣市的所有鄉鎮，我們取第一個作為代表
+    const locationData = locations[0].location?.[0];
+
+    if (!locationData) {
+      console.error("❌ 找不到該地點的 location 資料");
+      return res.status(404).json({ error: `找不到 ${targetCityName} 的天氣資料` });
+    }
+
+    // 整理資料
     const elements = locationData.weatherElement.reduce((acc, curr) => {
       acc[curr.elementName] = curr.time;
       return acc;
     }, {});
 
-    // 建立時間軸：以 Wx (每3小時一筆) 為基準，取前 24 筆 (約 3 天)
     const forecasts = [];
     const limit = 24;
 
-    for (let i = 0; i < Math.min(elements["Wx"].length, limit); i++) {
-      const wxTime = elements["Wx"][i];
-      const startTime = wxTime.startTime;
-      const endTime = wxTime.endTime;
+    if (elements["Wx"]) {
+      for (let i = 0; i < Math.min(elements["Wx"].length, limit); i++) {
+        const wxTime = elements["Wx"][i];
+        const startTime = wxTime.startTime;
+        const endTime = wxTime.endTime;
 
-      // 1. 找溫度 (T)
-      const tempObj = elements["T"].find(t => t.dataTime === startTime);
-      const temp = tempObj ? tempObj.elementValue[0].value : "--";
+        // 找溫度
+        const tempObj = (elements["T"] || []).find(t => t.dataTime === startTime);
+        const temp = tempObj ? tempObj.elementValue[0].value : "--";
 
-      // 2. 找降雨率 (PoP6h 或 PoP12h) - 需判斷時間區間重疊
-      let rain = "0";
-      const checkTime = (p) => (new Date(startTime) >= new Date(p.startTime) && new Date(endTime) <= new Date(p.endTime));
+        // 找降雨率
+        let rain = "0";
+        const checkTime = (p) => (new Date(startTime) >= new Date(p.startTime) && new Date(endTime) <= new Date(p.endTime));
 
-      const pop6 = (elements["PoP6h"] || []).find(checkTime);
-      const pop12 = (elements["PoP12h"] || []).find(checkTime);
+        const pop6 = (elements["PoP6h"] || []).find(checkTime);
+        const pop12 = (elements["PoP12h"] || []).find(checkTime);
 
-      if (pop6) rain = pop6.elementValue[0].value;
-      else if (pop12) rain = pop12.elementValue[0].value;
+        if (pop6) rain = pop6.elementValue[0].value;
+        else if (pop12) rain = pop12.elementValue[0].value;
 
-      if (rain === " ") rain = "0"; // 修正空值
+        if (rain === " ") rain = "0";
 
-      forecasts.push({
-        startTime: startTime,
-        weather: wxTime.elementValue[0].value, // 晴、多雲...
-        temp: temp,
-        rain: rain + "%"
-      });
+        forecasts.push({
+          startTime: startTime,
+          weather: wxTime.elementValue[0].value,
+          temp: temp,
+          rain: rain + "%"
+        });
+      }
     }
+
+    console.log(`✅ 成功取得資料，共 ${forecasts.length} 筆`);
 
     res.json({
       success: true,
@@ -125,11 +152,18 @@ const getWeather = async (req, res) => {
     });
 
   } catch (error) {
-    console.error(error);
-    res.status(500).json({ error: "Backend Error" });
+    console.error("❌ 伺服器錯誤:", error.message);
+    // 印出詳細錯誤給 Zeabur Log
+    if (error.response) {
+      console.error("CWA Error Status:", error.response.status);
+      console.error("CWA Error Data:", JSON.stringify(error.response.data));
+    }
+    res.status(500).json({ error: "Backend Error", details: error.message });
   }
 };
 
+app.get("/", (req, res) => res.send("Barbie Weather Server is Running! 🎀"));
 app.get("/api/weather/nearby", getWeather);
 app.get("/api/weather/:city", getWeather);
+
 app.listen(PORT, () => console.log(`🚀 Barbie Weather (3-Days) running on ${PORT}`));
