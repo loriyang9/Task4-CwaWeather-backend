@@ -162,7 +162,30 @@ const getWeather = async (req, res) => {
   }
 };
 
-app.get("/", (req, res) => res.send("Barbie Weather Server is Running! 🎀"));
+// === 修改這裡：讓首頁顯示 API 列表 (符合作業要求) ===
+app.get("/", (req, res) => {
+  res.json({
+    message: "歡迎來到芭比天氣 API 服務 ✨",
+    status: "Running",
+    endpoints: [
+      {
+        method: "GET",
+        path: "/api/weather/nearby",
+        description: "根據 GPS 經緯度取得最近城市天氣 (未來 3 天)",
+        params: { lat: "緯度", lon: "經度" },
+        example: "https://weather-task4.zeabur.app/api/weather/nearby?lat=25.03&lon=121.56"
+      },
+      {
+        method: "GET",
+        path: "/api/weather/:city",
+        description: "取得特定縣市天氣",
+        example: "https://weather-task4.zeabur.app/api/weather/taipei"
+      }
+    ]
+  });
+});
+
+// 其他路由保持不變
 app.get("/api/weather/nearby", getWeather);
 app.get("/api/weather/:city", getWeather);
 
