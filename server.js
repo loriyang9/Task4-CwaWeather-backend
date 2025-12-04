@@ -16,40 +16,38 @@ if (!CWA_API_KEY) {
 app.use(cors());
 app.use(express.json());
 
-// === 城市座標資料庫 ===
-const TAIWAN_CITIES = [
-  { name: "臺北市", lat: 25.032969, lon: 121.565418, id: "taipei" },
-  { name: "新北市", lat: 25.016982, lon: 121.462786, id: "new_taipei" },
-  { name: "桃園市", lat: 24.993628, lon: 121.300979, id: "taoyuan" },
-  { name: "臺中市", lat: 24.147736, lon: 120.673648, id: "taichung" },
-  { name: "臺南市", lat: 22.999728, lon: 120.227027, id: "tainan" },
-  { name: "高雄市", lat: 22.627278, lon: 120.301435, id: "kaohsiung" },
-  { name: "基隆市", lat: 25.127603, lon: 121.739183, id: "keelung" },
-  { name: "新竹市", lat: 24.813829, lon: 120.96748, id: "hsinchu" },
-  { name: "嘉義市", lat: 23.480075, lon: 120.449111, id: "chiayi" },
-  { name: "新竹縣", lat: 24.839652, lon: 121.011566, id: "hsinchu_county" },
-  { name: "苗栗縣", lat: 24.560159, lon: 120.821427, id: "miaoli" },
-  { name: "彰化縣", lat: 24.051796, lon: 120.516135, id: "changhua" },
-  { name: "南投縣", lat: 23.960998, lon: 120.695465, id: "nantou" },
-  { name: "雲林縣", lat: 23.709203, lon: 120.431337, id: "yunlin" },
-  { name: "嘉義縣", lat: 23.451843, lon: 120.255461, id: "chiayi_county" },
-  { name: "屏東縣", lat: 22.674115, lon: 120.490043, id: "pingtung" },
-  { name: "宜蘭縣", lat: 24.735159, lon: 121.761102, id: "yilan" },
-  { name: "花蓮縣", lat: 23.987159, lon: 121.601571, id: "hualien" },
-  { name: "臺東縣", lat: 22.761319, lon: 121.144476, id: "taitung" },
-  { name: "澎湖縣", lat: 23.571189, lon: 119.579315, id: "penghu" },
-  { name: "金門縣", lat: 24.449298, lon: 118.326254, id: "kinmen" },
-  { name: "連江縣", lat: 26.158537, lon: 119.951093, id: "lianjiang" },
+// === 衝浪浪點座標資料庫 ===
+const TAIWAN_SURF_SPOTS = [
+  { name: "白沙灣（石門）", lat: 25.284275, lon: 121.519083, id: "baishawan_shimen", county: "新北市" },
+  { name: "中角灣（金山）", lat: 25.240000, lon: 121.640000, id: "zhongjiao_bay", county: "新北市" },
+  { name: "福隆海水浴場", lat: 25.020000, lon: 121.940000, id: "fulong", county: "新北市" },
+  { name: "蜜月灣（大溪）", lat: 24.933000, lon: 121.889000, id: "honeymoon_bay", county: "宜蘭縣" },
+  { name: "外澳（雙獅）", lat: 24.874350, lon: 121.841670, id: "waiao", county: "宜蘭縣" },
+  { name: "烏石港", lat: 24.870634, lon: 121.835379, id: "wushi", county: "宜蘭縣" },
+  { name: "無尾港", lat: 24.600000, lon: 121.856000, id: "wuwei", county: "宜蘭縣" },
+  { name: "假日之森（竹南）", lat: 24.694834, lon: 120.853705, id: "holiday_forest", county: "苗栗縣" },
+  { name: "松柏港沙灘", lat: 24.428920, lon: 120.617320, id: "songbo", county: "苗栗縣" },
+  { name: "漁光島", lat: 22.981343, lon: 120.155064, id: "yuguangdao", county: "臺南市" },
+  { name: "旗津海水浴場", lat: 22.610922, lon: 120.266755, id: "cijin", county: "高雄市" },
+  { name: "南灣", lat: 21.980464, lon: 120.751608, id: "nanwan", county: "屏東縣" },
+  { name: "墾丁大灣", lat: 21.959417, lon: 120.762250, id: "dawan_kenting", county: "屏東縣" },
+  { name: "墾丁白砂灣", lat: 21.937056, lon: 120.710694, id: "baisha_kenting", county: "屏東縣" },
+  { name: "佳樂水", lat: 21.959875, lon: 120.765303, id: "jialeshui", county: "屏東縣" },
+  { name: "港口（滿州）", lat: 21.988342, lon: 120.841843, id: "gangkou", county: "屏東縣" },
+  { name: "東河", lat: 22.973750, lon: 121.311028, id: "donghe", county: "臺東縣" },
+  { name: "金樽", lat: 22.954000, lon: 121.293000, id: "jinzun", county: "臺東縣" },
+  { name: "都蘭海灘", lat: 22.878800, lon: 121.219600, id: "dulan", county: "臺東縣" },
+  { name: "山水沙灘（澎湖）", lat: 23.513222, lon: 119.591111, id: "shanshui_penghu", county: "澎湖縣" }
 ];
 
-function findNearestCity(lat, lon) {
-  let nearest = TAIWAN_CITIES[0];
+function findNearestSpot(lat, lon) {
+  let nearest = TAIWAN_SURF_SPOTS[0];
   let minDistance = Infinity;
-  TAIWAN_CITIES.forEach((city) => {
-    const dist = Math.sqrt(Math.pow(city.lat - lat, 2) + Math.pow(city.lon - lon, 2));
-    if (dist < minDistance) { minDistance = dist; nearest = city; }
+  TAIWAN_SURF_SPOTS.forEach((spot) => {
+    const dist = Math.sqrt(Math.pow(spot.lat - lat, 2) + Math.pow(spot.lon - lon, 2));
+    if (dist < minDistance) { minDistance = dist; nearest = spot; }
   });
-  return nearest.name;
+  return nearest;
 }
 
 const getWeather = async (req, res) => {
@@ -58,16 +56,17 @@ const getWeather = async (req, res) => {
       return res.status(500).json({ error: "Server API Key Missing" });
     }
 
-    let targetCityName = "臺北市";
+    let targetSpot = TAIWAN_SURF_SPOTS.find(s => s.id === "waiao"); // 預設外澳
+
     if (req.query.lat && req.query.lon) {
-      targetCityName = findNearestCity(parseFloat(req.query.lat), parseFloat(req.query.lon));
+      targetSpot = findNearestSpot(parseFloat(req.query.lat), parseFloat(req.query.lon));
     } else if (req.params.city) {
-      const found = TAIWAN_CITIES.find(c => c.id === req.params.city.toLowerCase());
-      if (found) targetCityName = found.name;
-      else if (req.params.city === "kaohsiung") targetCityName = "高雄市";
+      const found = TAIWAN_SURF_SPOTS.find(c => c.id === req.params.city.toLowerCase());
+      if (found) targetSpot = found;
     }
 
-    console.log(`📡 正在請求城市: ${targetCityName}`);
+    const targetCityName = targetSpot.county; // 使用縣市名稱去查 API
+    console.log(`📡 正在請求浪點: ${targetSpot.name} (${targetCityName})`);
 
     // 使用 F-D0047-091 (一週預報)
     const response = await axios.get(
@@ -148,12 +147,12 @@ const getWeather = async (req, res) => {
       });
     }
 
-    console.log(`✅ 成功回傳 ${targetCityName} 資料，共 ${forecasts.length} 筆`);
+    console.log(`✅ 成功回傳 ${targetSpot.name} 資料，共 ${forecasts.length} 筆`);
 
     res.json({
       success: true,
-      city: locationData.LocationName, // 回傳實際抓到的城市名稱
-      data: { city: locationData.LocationName, forecasts: forecasts }
+      city: targetSpot.name, // 回傳浪點名稱 (例如：外澳) 而不是縣市名稱
+      data: { city: targetSpot.name, forecasts: forecasts }
     });
 
   } catch (error) {
