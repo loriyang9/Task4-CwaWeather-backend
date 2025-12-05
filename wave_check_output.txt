@@ -1,0 +1,47 @@
+Checking Wave Data Availability for All Spots...
+
+✅ 白沙灣（石門） (baishawan_shimen): Wave Height = 1.8
+✅ 外澳 (waiao): Wave Height = 0.9
+✅ 福隆 (fulong): Wave Height = 0.9
+✅ 中角灣 (zhongjiao): Wave Height = 1.8
+✅ 翡翠灣 (greenbay): Wave Height = 1.8
+✅ 金山 (jinshan): Wave Height = 1.8
+✅ 大溪 (daxi): Wave Height = 0.9
+✅ 宜蘭 (yilan): Wave Height = 0.9
+✅ 蘇澳 (suao): Wave Height = 1.2
+✅ 南灣 (nanwan): Wave Height = 1.0
+✅ 佳樂水 (jialeshui): Wave Height = 1.0
+❌ 墾丁大灣 (dawan_kenting): Wave Height = --
+❌ 墾丁白砂灣 (baisha_kenting): Wave Height = --
+❌ 風吹砂 (fongchuisha): Wave Height = --
+❌ 台東 (taitung): Wave Height = --
+❌ 成功 (chenggong): Wave Height = --
+❌ 金樽 (jinzun): Wave Height = --
+❌ 花蓮 (hualien): Wave Height = --
+❌ 七星潭 (cisingtan): Wave Height = --
+❌ 高雄 (kaohsiung): Wave Height = --
+❌ 旗津 (cijin): Wave Height = --
+❌ 台南 (tainan): Wave Height = --
+❌ 漁光島 (yuguang): Wave Height = --
+❌ 台中 (taichung): Wave Height = --
+❌ 大安 (daan): Wave Height = --
+❌ 苗栗 (miaoli): Wave Height = --
+❌ 竹南 (zhunan): Wave Height = --
+❌ 新竹 (hsinchu): Wave Height = --
+
+--- Summary ---
+Total Spots: 28
+Spots with Wave Data: 11
+
+Available Spots:
+- 白沙灣（石門）: 1.8m, 東北東風 (Township Forecast (F-D0047))
+- 外澳: 0.9m, 東北東風 (Observation (O-B0075-001))
+- 福隆: 0.9m, 東北東風 (Observation (O-B0075-001))
+- 中角灣: 1.8m, 東北東風 (Township Forecast (F-D0047))
+- 翡翠灣: 1.8m, 東北東風 (Township Forecast (F-D0047))
+- 金山: 1.8m, 東北東風 (Township Forecast (F-D0047))
+- 大溪: 0.9m, 東北東風 (Observation (O-B0075-001))
+- 宜蘭: 0.9m, 東北東風 (Observation (O-B0075-001))
+- 蘇澳: 1.2m, 東北東風 (Observation (O-B0075-001))
+- 南灣: 1.0m, 東南東風 (Observation (O-B0075-001))
+- 佳樂水: 1.0m, 東南東風 (Observation (O-B0075-001))

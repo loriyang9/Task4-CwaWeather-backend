@@ -1,6 +1,6 @@
 const axios = require('axios');
 
-const BASE_URL = 'http://localhost:3000/api/weather';
+const BASE_URL = "http://localhost:3000/api/weather";
 const SPOTS = ['baishawan_shimen', 'waiao', 'nanwan', 'taitung'];
 
 async function verifyWeather() {
@@ -15,14 +15,16 @@ async function verifyWeather() {
                 const forecasts = res.data.data.forecasts;
                 if (forecasts && forecasts.length > 0) {
                     console.log(`✅ Success: ${res.data.city}`);
+                    console.log(`   Wind Source: ${res.data.data.current.windSource}`);
+                    console.log(`   Current Wind Speed: ${res.data.data.current.windSpeed}`);
+                    console.log(`   Current Wind Dir: ${res.data.data.current.windDir}`);
+                    console.log(`   Current Wave Height: ${res.data.data.current.waveHeight}`);
+                    console.log(`   Current Wave Dir: ${res.data.data.current.waveDir}`);
+                    console.log(`   Current Wave Period: ${res.data.data.current.wavePeriod}`);
 
                     // Print first 3 forecasts
                     forecasts.slice(0, 3).forEach((f, i) => {
-                        console.log(`\n[Forecast ${i}] Time: ${f.startTime}`);
-                        console.log(`   Temp: ${f.temp}`);
-                        console.log(`   Rain: ${f.rain}`);
-                        console.log(`   Weather: ${f.weather}`);
-                        console.log(`   Wind: ${f.windSpeed}`);
+                        console.log(`[Forecast ${i}] Full Object: ${JSON.stringify(f)}`);
                     });
 
                 } else {

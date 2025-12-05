@@ -22,6 +22,7 @@ const SURF_SPOTS = [
     "name": "白沙灣（石門）",
     "id": "baishawan_shimen",
     "marine": { "dataset": "O-MMC-0001", "stationId": "C6AH2", "name": "富貴角浮標" },
+    "windStationId": "C6AH2",
     "tide": { "dataset": "F-A0021-001", "stationId": "N00500", "name": "淡水" },
     "weather": { "datasetId": "F-D0047-069", "locationName": "石門區", "desc": "新北市" },
     "forecast": { "datasetId": "F-A0012-001", "locationName": "富貴角" },
@@ -32,6 +33,7 @@ const SURF_SPOTS = [
     "name": "外澳",
     "id": "waiao",
     "marine": { "dataset": "O-MMC-0001", "stationId": "46694A", "name": "龍洞浮標" },
+    "windStationId": "46694A",
     "tide": { "dataset": "F-A0021-001", "stationId": "I00100", "name": "烏石" },
     "weather": { "datasetId": "F-D0047-001", "locationName": "頭城鎮", "desc": "宜蘭縣" },
     "forecast": { "datasetId": "F-A0012-001", "locationName": "龍洞" },
@@ -42,6 +44,7 @@ const SURF_SPOTS = [
     "name": "福隆",
     "id": "fulong",
     "marine": { "dataset": "O-MMC-0001", "stationId": "46694A", "name": "龍洞浮標" },
+    "windStationId": "46694A",
     "tide": { "dataset": "F-A0021-001", "stationId": "A01700", "name": "福隆" },
     "weather": { "datasetId": "F-D0047-069", "locationName": "貢寮區", "desc": "新北市" },
     "forecast": { "datasetId": "F-A0012-001", "locationName": "龍洞" },
@@ -52,6 +55,7 @@ const SURF_SPOTS = [
     "name": "中角灣",
     "id": "zhongjiao",
     "marine": { "dataset": "O-MMC-0001", "stationId": "C6AH2", "name": "富貴角浮標" },
+    "windStationId": "C6AH2",
     "tide": { "dataset": "F-A0021-001", "stationId": "N00500", "name": "淡水" },
     "weather": { "datasetId": "F-D0047-069", "locationName": "金山區", "desc": "新北市" },
     "forecast": { "datasetId": "F-A0012-001", "locationName": "富貴角" },
@@ -62,6 +66,7 @@ const SURF_SPOTS = [
     "name": "翡翠灣",
     "id": "greenbay",
     "marine": { "dataset": "O-MMC-0001", "stationId": "C6AH2", "name": "富貴角浮標" },
+    "windStationId": "C6AH2",
     "tide": { "dataset": "F-A0021-001", "stationId": "A00400", "name": "基隆" },
     "weather": { "datasetId": "F-D0047-069", "locationName": "萬里區", "desc": "新北市" },
     "forecast": { "datasetId": "F-A0012-001", "locationName": "富貴角" },
@@ -72,6 +77,7 @@ const SURF_SPOTS = [
     "name": "金山",
     "id": "jinshan",
     "marine": { "dataset": "O-MMC-0001", "stationId": "C6AH2", "name": "富貴角浮標" },
+    "windStationId": "C6AH2",
     "tide": { "dataset": "F-A0021-001", "stationId": "A00400", "name": "基隆" },
     "weather": { "datasetId": "F-D0047-069", "locationName": "金山區", "desc": "新北市" },
     "forecast": { "datasetId": "F-A0012-001", "locationName": "富貴角" },
@@ -82,6 +88,7 @@ const SURF_SPOTS = [
     "name": "大溪",
     "id": "daxi",
     "marine": { "dataset": "O-MMC-0001", "stationId": "46694A", "name": "龍洞浮標" },
+    "windStationId": "46694A",
     "tide": { "dataset": "F-A0021-001", "stationId": "I00100", "name": "烏石" },
     "weather": { "datasetId": "F-D0047-001", "locationName": "頭城鎮", "desc": "宜蘭縣" },
     "forecast": { "datasetId": "F-A0012-001", "locationName": "龍洞" },
@@ -92,6 +99,7 @@ const SURF_SPOTS = [
     "name": "宜蘭",
     "id": "yilan",
     "marine": { "dataset": "O-MMC-0001", "stationId": "46694A", "name": "龍洞浮標" },
+    "windStationId": "46694A",
     "tide": { "dataset": "F-A0021-001", "stationId": "10002030", "name": "蘇澳" },
     "weather": { "datasetId": "F-D0047-001", "locationName": "頭城鎮", "desc": "宜蘭縣" },
     "forecast": { "datasetId": "F-A0012-001", "locationName": "龍洞" },
@@ -106,22 +114,26 @@ const SURF_SPOTS = [
     "weather": { "datasetId": "F-D0047-001", "locationName": "蘇澳鎮", "desc": "宜蘭縣" },
     "forecast": { "datasetId": "F-A0012-001", "locationName": "蘇澳" },
     "lat": 24.5955, "lon": 121.8655,
-    "sunriseSunset": { "dataset": "A-B0062-001" }
+    "sunriseSunset": { "dataset": "A-B0062-001" },
+    "windStationId": "46708A" // Assuming the marine station is also the wind station for harbor data
   },
   {
     "name": "南灣",
     "id": "nanwan",
     "marine": { "dataset": "O-MMC-0001", "stationId": "46759A", "name": "鵝鑾鼻浮標" },
+    "windStationId": "46759A",
     "tide": { "dataset": "F-A0021-001", "stationId": "I05800", "name": "後壁湖" },
     "weather": { "datasetId": "F-D0047-033", "locationName": "恆春鎮", "desc": "屏東縣" },
     "forecast": { "datasetId": "F-A0012-001", "locationName": "鵝鑾鼻" },
     "lat": 21.9565, "lon": 120.7635,
-    "sunriseSunset": { "dataset": "A-B0062-001" }
+    "sunriseSunset": { "dataset": "A-B0062-001" },
+    "windStationId": "46759A" // Assuming the marine station is also the wind station for harbor data
   },
   {
     "name": "佳樂水",
     "id": "jialeshui",
     "marine": { "dataset": "O-MMC-0001", "stationId": "46759A", "name": "鵝鑾鼻浮標" },
+    "windStationId": "46759A",
     "tide": { "dataset": "F-A0021-001", "stationId": "I05800", "name": "後壁湖" },
     "weather": { "datasetId": "F-D0047-033", "locationName": "滿州鄉", "desc": "屏東縣" },
     "forecast": { "datasetId": "F-A0012-001", "locationName": "鵝鑾鼻" },
@@ -367,9 +379,29 @@ async function fetchTideForecast(locationId) {
 }
 
 // 3. Fetch Weather Data (F-D0047-XXX) - Forecast
+// Helper: Convert m/s to km/h
+function convertMpsToKmh(mps) {
+  if (!mps || mps === "undefined" || mps === "--") return "--";
+  const val = parseFloat(mps);
+  if (isNaN(val)) return "--";
+  return `${Math.round(val * 3.6)} km/h`;
+}
+
+// Helper: Convert degrees to direction text
+function convertDegreesToDirection(degrees) {
+  if (!degrees || degrees === "undefined" || degrees === "None") return "--";
+  const val = parseFloat(degrees);
+  if (isNaN(val)) return "--";
+
+  const directions = ["北風", "北北東風", "東北風", "東北東風", "東風", "東南東風", "東南風", "南南東風", "南風", "南南西風", "西南風", "西南西風", "西風", "西北西風", "西北風", "北北西風"];
+  const index = Math.round(val / 22.5) % 16;
+  return directions[index];
+}
+
 async function fetchWeatherData(datasetId, locationName) {
   try {
     const url = `${CWA_API_BASE_URL}/v1/rest/datastore/${datasetId}`;
+    console.log(`Fetching Weather Data: ${url} for ${locationName}`);
     const res = await axios.get(url, {
       params: {
         Authorization: CWA_API_KEY,
@@ -379,75 +411,115 @@ async function fetchWeatherData(datasetId, locationName) {
     });
 
     const records = res.data.records || res.data.Records;
-    if (!records) return [];
+    if (!records) {
+      console.error(`No records found for ${locationName}`);
+      return [];
+    }
 
     const locations = records.locations || records.Locations;
-    if (!locations) return [];
+    if (!locations) {
+      console.error(`No locations found for ${locationName}`);
+      return [];
+    }
 
     const locationList = locations[0].location || locations[0].Location;
-    if (!locationList) return [];
+    if (!locationList) {
+      console.error(`No locationList found for ${locationName}`);
+      return [];
+    }
 
-    const location = locationList[0];
-    if (!location) return [];
+    // Fix: Find the specific location by name
+    const location = locationList.find(l => l.locationName === locationName || l.LocationName === locationName);
+    if (!location) {
+      console.error(`Location not found: ${locationName}`);
+      return [];
+    }
+    console.log(`Found location: ${location.locationName || location.LocationName}`);
 
     // Parse into a time-based map
     const weatherMap = {};
+    const weatherElements = location.weatherElement || location.WeatherElement;
 
-    location.WeatherElement.forEach(el => {
-      const ename = el.ElementName;
+    if (!weatherElements) return [];
 
-      el.Time.forEach(t => {
-        const startTime = t.StartTime || t.DataTime;
+
+    weatherElements.forEach(el => {
+      const ename = el.ElementName || el.elementName;
+      const timeData = el.Time || el.time;
+
+      timeData.forEach(t => {
+        const startTime = t.StartTime || t.DataTime || t.startTime || t.dataTime;
         if (!weatherMap[startTime]) weatherMap[startTime] = { startTime };
+
+        const ev = t.ElementValue[0] || t.elementValue[0];
+        const value = ev.value || ev.Value || ev.ElementValue; // Generic value
 
         // Handle both Chinese and English element names
         if (ename === "天氣現象" || ename === "Wx") {
-          weatherMap[startTime].weather = t.ElementValue[0].Weather || t.ElementValue[0].value;
+          weatherMap[startTime].weather = ev.Weather || value;
         }
         if (ename === "平均溫度" || ename === "T" || ename === "溫度") {
-          weatherMap[startTime].temp = t.ElementValue[0].ElementValue || t.ElementValue[0].value || t.ElementValue[0].Temperature;
+          weatherMap[startTime].temp = ev.Temperature || value;
         }
         if (ename === "12小時降雨機率" || ename === "PoP12h" || ename === "PoP6h" || ename === "3小時降雨機率") {
-          const val = t.ElementValue[0].ProbabilityOfPrecipitation || t.ElementValue[0].value;
-          weatherMap[startTime].rain = val;
+          weatherMap[startTime].rain = ev.ProbabilityOfPrecipitation || value;
         }
         if (ename === "風速" || ename === "WS") {
-          weatherMap[startTime].windSpeed = t.ElementValue[0].WindSpeed || t.ElementValue[0].value;
+          const mps = ev.WindSpeed || value;
+          weatherMap[startTime].windSpeed = convertMpsToKmh(mps);
         }
         if (ename === "風向" || ename === "WD") {
-          weatherMap[startTime].windDir = t.ElementValue[0].WindDirection || t.ElementValue[0].value;
+          weatherMap[startTime].windDir = ev.WindDirection || value;
         }
       });
     });
 
     // Fill forward missing weather and rain data
     const sortedTimes = Object.keys(weatherMap).sort();
+    console.log(`Parsed times for ${locationName}:`, sortedTimes.slice(0, 5));
+
     let lastWeather = null;
     let lastRain = null;
+    let lastTemp = null;
+    let lastWindSpeed = null;
+    let lastWindDir = null;
 
     sortedTimes.forEach(time => {
       const entry = weatherMap[time];
-      if (entry.weather) {
-        lastWeather = entry.weather;
-      } else if (lastWeather) {
-        entry.weather = lastWeather;
-      }
 
-      if (entry.rain) {
-        lastRain = entry.rain;
-      } else if (lastRain) {
-        entry.rain = lastRain;
-      }
+      // Fill Weather
+      if (entry.weather) lastWeather = entry.weather;
+      else if (lastWeather) entry.weather = lastWeather;
+
+      // Fill Rain
+      if (entry.rain) lastRain = entry.rain;
+      else if (lastRain) entry.rain = lastRain;
+
+      // Fill Temp
+      if (entry.temp) lastTemp = entry.temp;
+      else if (lastTemp) entry.temp = lastTemp;
+
+      // Fill WindSpeed
+      if (entry.windSpeed) lastWindSpeed = entry.windSpeed;
+      else if (lastWindSpeed) entry.windSpeed = lastWindSpeed;
+
+      // Fill WindDir
+      if (entry.windDir) lastWindDir = entry.windDir;
+      else if (lastWindDir) entry.windDir = lastWindDir;
     });
 
     // Convert to array and sort by time
     const forecasts = sortedTimes.map(startTime => {
       const w = weatherMap[startTime];
-      return {
+      if (locationName === "石門區" && startTime.includes("21:00:00")) {
+        console.error(`   Map Entry for ${startTime}: ${JSON.stringify(w)}`);
+      }
+
+      const ret = {
         startTime: w.startTime,
         weather: w.weather,
         temp: w.temp,
-        rain: (w.rain && w.rain !== "undefined") ? String(w.rain).replace(/%/g, '') : "0",
+        rain: (w.rain && w.rain !== "undefined") ? (String(w.rain).includes('%') ? w.rain : w.rain + '%') : "0%",
         windSpeed: w.windSpeed,
         windDir: w.windDir,
         waveHeight: "--",
@@ -455,6 +527,8 @@ async function fetchWeatherData(datasetId, locationName) {
         wavePeriod: "--",
         tideLevel: "--"
       };
+
+      return ret;
     })
       .filter(f => new Date(f.startTime) >= new Date()); // Filter past forecasts
 
@@ -462,6 +536,85 @@ async function fetchWeatherData(datasetId, locationName) {
   } catch (error) {
     console.error(`Weather fetch error for ${locationName}:`, error.message);
     return [];
+  }
+}
+
+// Fetch Buoy Observation (O-B0075-001) - Wind & Wave
+async function fetchBuoyObservation(stationId) {
+  if (!stationId) return null;
+  try {
+    const url = `https://opendata.cwa.gov.tw/api/v1/rest/datastore/O-B0075-001?Authorization=${CWA_API_KEY}&StationID=${stationId}`;
+    console.log(`Fetching Buoy Observation (O-B0075-001): ${url}`);
+    const response = await axios.get(url);
+
+    const data = response.data;
+    console.log(`DEBUG: Station ${stationId} Data Success: ${data.success}`);
+    if (data.Success === "false" || data.success === "false") {
+      console.error(`Buoy Observation fetch error: ${data.Result?.message || data.result?.message}`);
+      return null;
+    }
+
+    const records = data.Records || data.records;
+    console.log(`DEBUG: Station ${stationId} Records found: ${!!records}`);
+    if (!records || !records.SeaSurfaceObs || !records.SeaSurfaceObs.Location) {
+      console.error(`Buoy Observation structure error for ${stationId}`);
+      return null;
+    }
+
+    console.log(`DEBUG: Station ${stationId} Locations count: ${records.SeaSurfaceObs.Location.length}`);
+    const location = records.SeaSurfaceObs.Location.find(l => l.Station.StationID === stationId);
+    if (!location) {
+      console.error(`DEBUG: Station ${stationId} not found in ${records.SeaSurfaceObs.Location.length} locations`);
+      return null;
+    }
+
+    console.log(`DEBUG: Station ${stationId} Location found`);
+    if (!location.StationObsTimes || !location.StationObsTimes.StationObsTime) {
+      console.error(`DEBUG: No observation times for ${stationId}`);
+      return null;
+    }
+
+    // Get the latest observation
+    const observations = location.StationObsTimes.StationObsTime;
+    console.log(`DEBUG: Station ${stationId} Observations count: ${observations.length}`);
+    // Sort by DateTime descending just in case, though usually sorted
+    observations.sort((a, b) => new Date(b.DateTime) - new Date(a.DateTime));
+    const latest = observations[0];
+    console.log(`DEBUG: Station ${stationId} Latest found: ${!!latest}`);
+
+    if (!latest || !latest.WeatherElements) {
+      console.error(`DEBUG: No WeatherElements for ${stationId}`);
+      return null;
+    }
+
+    const wind = latest.WeatherElements.PrimaryAnemometer;
+    const we = latest.WeatherElements;
+
+    const result = {};
+
+    // Wind Data
+    if (wind) {
+      const speed = wind.WindSpeed;
+      const dir = wind.WindDirection;
+      // Check for invalid values
+      if (speed !== "None" && dir !== "None" && parseFloat(speed) >= 0) {
+        result.windSpeed = convertMpsToKmh(speed);
+        result.windDir = convertDegreesToDirection(dir);
+      }
+    }
+
+    // Wave Data (Directly in WeatherElements)
+    if (we) {
+      result.waveHeight = (we.WaveHeight !== "None" && parseFloat(we.WaveHeight) >= 0) ? `${we.WaveHeight}m` : null;
+      result.waveDir = (we.WaveDirection !== "None") ? convertDegreesToDirection(we.WaveDirection).replace("風", "") : null;
+      result.wavePeriod = (we.WavePeriod !== "None" && parseFloat(we.WavePeriod) >= 0) ? `${we.WavePeriod}s` : null;
+    }
+
+    return result;
+
+  } catch (error) {
+    console.error(`Buoy Observation fetch error for ${stationId}: ${error.message}`);
+    return null;
   }
 }
 
@@ -569,87 +722,107 @@ const getWeather = async (req, res) => {
     console.log(`📡 Fetching data for: ${targetSpot.name}`);
 
     // Parallel Fetch
-    // Parallel Fetch
-    const [marineData, tideForecasts, weatherData, marineForecastData, sunriseData] = await Promise.all([
+    const [marineData, tideForecasts, weatherData, marineForecastData, sunriseData, buoyObservation] = await Promise.all([
       fetchMarineData(targetSpot.marine.stationId),
       fetchTideForecast(targetSpot.tide.stationId),
       fetchWeatherData(targetSpot.weather.datasetId, targetSpot.weather.locationName),
       fetchMarineForecast(targetSpot.forecast.locationName),
-      fetchSunriseSunset(targetSpot.weather.desc) // Use county (desc) for sunrise
+      fetchSunriseSunset(targetSpot.weather.desc),
+      targetSpot.windStationId ? fetchBuoyObservation(targetSpot.windStationId) : null
     ]);
 
-    // Aggregate Data
-    const forecasts = [];
-
-    if (weatherData.length > 0) {
-      weatherData.forEach((w, index) => {
-        const forecast = {
-          startTime: w.startTime,
-          weather: w.weather,
-          temp: w.temp,
-          rain: (w.rain && w.rain !== "undefined") ? `${w.rain}%` : "0%",
-          windSpeed: w.windSpeed,
-          windDir: w.windDir,
-          waveHeight: "--",
-          waveDir: "--",
-          wavePeriod: "--",
-          tideLevel: "--"
-        };
-
-        // 1. Overlay Marine Forecast (F-A0012-001) if available for this time
-        // Find matching marine forecast (approximate time match)
-        if (marineForecastData.length > 0) {
-          const mForecast = marineForecastData.find(mf => Math.abs(new Date(mf.startTime) - new Date(w.startTime)) < 3 * 60 * 60 * 1000); // within 3 hours
-          if (mForecast) {
-            forecast.waveHeight = mForecast.waveHeight || "--";
-            forecast.wavePeriod = mForecast.wavePeriod || "--";
-            forecast.waveDir = mForecast.waveDir || "--";
-            forecast.windSpeed = mForecast.windSpeed || forecast.windSpeed; // Prefer marine wind? Or keep weather wind?
-            // forecast.windDir = mForecast.windDir || forecast.windDir;
-          }
-        }
-
-        // 2. If it's the first item (Current), overlay Real-time Marine & Tide Observation Data
-        if (index === 0) {
-          if (marineData) {
-            forecast.waveHeight = marineData.waveHeight || forecast.waveHeight; // Prefer real-time
-            forecast.waveDir = marineData.waveDir || forecast.waveDir || "--";
-            forecast.wavePeriod = marineData.wavePeriod || forecast.wavePeriod || "--";
-            forecast.windSpeed = marineData.windSpeed || forecast.windSpeed;
-            forecast.windDir = marineData.windDir || forecast.windDir;
-          }
-          if (marineData && marineData.tideLevel) {
-            forecast.tideLevel = marineData.tideLevel;
-          }
-        }
-
-        forecasts.push(forecast);
+    // Process Weather Data (Township)
+    const weatherMap = {};
+    if (weatherData && Array.isArray(weatherData)) {
+      weatherData.forEach(item => {
+        weatherMap[item.startTime] = item;
       });
     }
 
-    // Fallback if no data fetched (API Down)
-    if (forecasts.length === 0) {
-      forecasts.push({
-        startTime: new Date().toISOString(),
-        weather: "資料無法取得",
-        temp: "--",
-        rain: "--",
-        windSpeed: marineData ? marineData.windSpeed : "--",
-        windDir: marineData ? marineData.windDir : "--",
-        waveHeight: marineData ? marineData.waveHeight : "--",
-        waveDir: marineData ? marineData.waveDir : "--",
-        wavePeriod: marineData ? marineData.wavePeriod : "--",
-        tideLevel: marineData ? marineData.tideLevel : "--"
-      });
+    // Get sorted times from the map
+    const sortedTimes = Object.keys(weatherMap).sort();
+
+    // Determine Current Wind Data (Priority: Observation -> Township Forecast)
+    let currentWindSpeed = "--";
+    let currentWindDir = "--";
+    let activeWindSource = "None";
+
+    // Determine Current Wave Data (Priority: Observation -> "--")
+    let currentWaveHeight = "--";
+    let currentWaveDir = "--";
+    let currentWavePeriod = "--";
+
+    if (buoyObservation) {
+      // Wind
+      if (buoyObservation.windSpeed && buoyObservation.windDir) {
+        currentWindSpeed = buoyObservation.windSpeed;
+        currentWindDir = buoyObservation.windDir;
+        activeWindSource = "Observation (O-B0075-001)";
+        console.log(`   Using Buoy Wind (O-B0075-001): ${currentWindSpeed}`);
+      }
+
+      // Wave
+      if (buoyObservation.waveHeight) currentWaveHeight = buoyObservation.waveHeight;
+      if (buoyObservation.waveDir) currentWaveDir = buoyObservation.waveDir;
+      if (buoyObservation.wavePeriod) currentWavePeriod = buoyObservation.wavePeriod;
     }
+
+    // Fallback for Wind ONLY (Township Forecast)
+    if (activeWindSource === "None") {
+      // Fallback to the first forecast entry (closest to now)
+      const now = new Date();
+      const currentForecast = sortedTimes.find(t => new Date(t) >= now);
+      if (currentForecast && weatherMap[currentForecast]) {
+        currentWindSpeed = weatherMap[currentForecast].windSpeed;
+        currentWindDir = weatherMap[currentForecast].windDir;
+        activeWindSource = "Township Forecast (F-D0047)";
+        console.log(`   Using Township Forecast Wind: ${currentWindSpeed}`);
+      }
+    }
+
+    // Construct Forecasts
+    const forecasts = sortedTimes.map(startTime => {
+      const w = weatherMap[startTime];
+      return {
+        startTime: w.startTime,
+        weather: w.weather,
+        temp: w.temp,
+        rain: w.rain,
+        windSpeed: w.windSpeed,
+        windDir: w.windDir,
+        waveHeight: "--",
+        waveDir: "--",
+        wavePeriod: "--",
+        tideLevel: "--"
+      };
+    })
+      .filter(f => new Date(f.startTime) >= new Date());
+
+    // Current Conditions
+    const current = {
+      startTime: forecasts[0]?.startTime || new Date().toISOString(), // Add startTime
+      temp: forecasts[0]?.temp || "--",
+      weather: forecasts[0]?.weather || "--",
+      windSpeed: currentWindSpeed, // Use prioritized wind
+      windDir: currentWindDir,     // Use prioritized wind
+      windSource: activeWindSource,
+      waveHeight: currentWaveHeight, // Prioritized Wave
+      waveDir: currentWaveDir,       // Prioritized Wave
+      wavePeriod: currentWavePeriod, // Prioritized Wave
+      seaTemp: marineData?.seaTemp || "--",
+      tideLevel: tideForecasts[0]?.tideLevel || "--", // Approximate current tide
+      rain: forecasts[0]?.rain || "0"
+    };
 
     res.json({
       success: true,
       city: targetSpot.name,
       data: {
         city: targetSpot.name,
-        seaTemp: marineData ? marineData.seaTemp : "--",
-        currentTide: marineData ? marineData.tideLevel : "--",
+        current: current, // Added current object
+        seaTemp: current.seaTemp,
+        currentTide: current.tideLevel,
+        windSource: current.windSource, // Added for verification
         tideForecasts: tideForecasts,
         forecasts: forecasts,
         sunrise: sunriseData ? sunriseData.sunrise : "--",
