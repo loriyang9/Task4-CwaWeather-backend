@@ -18,9 +18,11 @@ async function verifyWeather() {
                     console.log(`   Wind Source: ${res.data.data.current.windSource}`);
                     console.log(`   Current Wind Speed: ${res.data.data.current.windSpeed}`);
                     console.log(`   Current Wind Dir: ${res.data.data.current.windDir}`);
+                    console.log(`   Wave Source: ${res.data.data.current.waveSource}`);
                     console.log(`   Current Wave Height: ${res.data.data.current.waveHeight}`);
                     console.log(`   Current Wave Dir: ${res.data.data.current.waveDir}`);
                     console.log(`   Current Wave Period: ${res.data.data.current.wavePeriod}`);
+                    console.log(`   Current Tide Level: ${res.data.data.current.tideLevel}`);
 
                     // Print first 3 forecasts
                     forecasts.slice(0, 3).forEach((f, i) => {
