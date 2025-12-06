@@ -4,6 +4,11 @@ const cors = require("cors");
 const axios = require("axios");
 const WaveForecastCache = require("./WaveForecastCache");
 const WAVE_FORECAST_MAPPING = require("./wave_location_mapping");
+const { analyzeWind } = require("./windAnalysis");
+const { generateWindNarrative, getWindQualityText, getWindTypeText } = require("./narrativeGeneration");
+const { generateWaveNarrative } = require("./waveAnalysis");
+const { analyzeBoardSuitability } = require("./boardSuitability");
+const { generateOverallAssessment } = require("./interactionAnalysis");
 
 const app = express();
 const PORT = process.env.PORT || 3000;
@@ -45,13 +50,14 @@ const SURF_SPOTS = [
     },
     "lat": 25.2866,
     "lon": 121.5195,
+    "facing": 350,
     "sunriseSunset": {
       "dataset": "A-B0062-001"
     }
   },
   {
     "name": "中角灣（金山）",
-    "id": "zhongjiao",
+    "id": "zhongjiao_bay",
     "primaryWaveStationId": "C6AH2",
     "secondaryWaveStationId": "TPBU01",
     "windStationId": "C6AH2",
@@ -69,8 +75,9 @@ const SURF_SPOTS = [
       "datasetId": "F-A0012-001",
       "locationName": "富貴角"
     },
-    "lat": 25.2245,
-    "lon": 121.6345,
+    "lat": 25.2370,
+    "lon": 121.6360,
+    "facing": 20,
     "sunriseSunset": {
       "dataset": "A-B0062-001"
     }
@@ -95,15 +102,16 @@ const SURF_SPOTS = [
       "datasetId": "F-A0012-001",
       "locationName": "龍洞"
     },
-    "lat": 25.0205,
-    "lon": 121.9443,
+    "lat": 25.0240,
+    "lon": 121.9580,
+    "facing": 40,
     "sunriseSunset": {
       "dataset": "A-B0062-001"
     }
   },
   {
     "name": "蜜月灣（大溪）",
-    "id": "daxi",
+    "id": "honeymoon_bay",
     "primaryWaveStationId": "OAC005",
     "secondaryWaveStationId": "46708A",
     "windStationId": "46694A",
@@ -121,8 +129,9 @@ const SURF_SPOTS = [
       "datasetId": "F-A0012-001",
       "locationName": "龍洞"
     },
-    "lat": 24.9355,
-    "lon": 121.8955,
+    "lat": 24.9410,
+    "lon": 121.8930,
+    "facing": 100,
     "sunriseSunset": {
       "dataset": "A-B0062-001"
     }
@@ -149,13 +158,14 @@ const SURF_SPOTS = [
     },
     "lat": 24.8735,
     "lon": 121.8358,
+    "facing": 90,
     "sunriseSunset": {
       "dataset": "A-B0062-001"
     }
   },
   {
     "name": "烏石港",
-    "id": "yilan",
+    "id": "wushi",
     "primaryWaveStationId": "46708A",
     "secondaryWaveStationId": "46694A",
     "windStationId": "46694A",
@@ -175,13 +185,14 @@ const SURF_SPOTS = [
     },
     "lat": 24.8555,
     "lon": 121.8255,
+    "facing": 90,
     "sunriseSunset": {
       "dataset": "A-B0062-001"
     }
   },
   {
     "name": "無尾港",
-    "id": "suao",
+    "id": "wuwei",
     "primaryWaveStationId": "46706A",
     "secondaryWaveStationId": "46708A",
     "windStationId": "46708A",
@@ -201,13 +212,14 @@ const SURF_SPOTS = [
     },
     "lat": 24.5955,
     "lon": 121.8655,
+    "facing": 90,
     "sunriseSunset": {
       "dataset": "A-B0062-001"
     }
   },
   {
     "name": "假日之森（竹南）",
-    "id": "zhunan",
+    "id": "holiday_forest",
     "primaryWaveStationId": "C6D01",
     "secondaryWaveStationId": "46757B",
     "windStationId": "46757B",
@@ -227,6 +239,7 @@ const SURF_SPOTS = [
     },
     "lat": 24.6955,
     "lon": 120.8555,
+    "facing": 270,  // 面向西方(台灣海峽)
     "sunriseSunset": {
       "dataset": "A-B0062-001"
     }
@@ -253,13 +266,14 @@ const SURF_SPOTS = [
     },
     "lat": 24.4255,
     "lon": 120.5855,
+    "facing": 290,
     "sunriseSunset": {
       "dataset": "A-B0062-001"
     }
   },
   {
     "name": "漁光島",
-    "id": "yuguang",
+    "id": "yuguangdao",
     "primaryWaveStationId": "C6N01",
     "secondaryWaveStationId": "COMC08",
     "windStationId": "COMC08",
@@ -303,8 +317,9 @@ const SURF_SPOTS = [
       "datasetId": "F-A0012-001",
       "locationName": "高雄"
     },
-    "lat": 22.6155,
-    "lon": 120.2655,
+    "lat": 22.6160,
+    "lon": 120.2654,
+    "facing": 250,
     "sunriseSunset": {
       "dataset": "A-B0062-001"
     }
@@ -329,8 +344,9 @@ const SURF_SPOTS = [
       "datasetId": "F-A0012-001",
       "locationName": "鵝鑾鼻"
     },
-    "lat": 21.9565,
-    "lon": 120.7635,
+    "lat": 21.9440,
+    "lon": 120.7612,
+    "facing": 170,
     "sunriseSunset": {
       "dataset": "A-B0062-001"
     }
@@ -355,8 +371,9 @@ const SURF_SPOTS = [
       "datasetId": "F-A0012-001",
       "locationName": "鵝鑾鼻"
     },
-    "lat": 21.9455,
-    "lon": 120.7955,
+    "lat": 21.9440,
+    "lon": 120.7950,
+    "facing": 190,
     "sunriseSunset": {
       "dataset": "A-B0062-001"
     }
@@ -383,6 +400,7 @@ const SURF_SPOTS = [
     },
     "lat": 21.9355,
     "lon": 120.7155,
+    "facing": 250,
     "sunriseSunset": {
       "dataset": "A-B0062-001"
     }
@@ -409,6 +427,7 @@ const SURF_SPOTS = [
     },
     "lat": 21.9935,
     "lon": 120.8455,
+    "facing": 60,
     "sunriseSunset": {
       "dataset": "A-B0062-001"
     }
@@ -435,6 +454,7 @@ const SURF_SPOTS = [
     },
     "lat": 21.9855,
     "lon": 120.8455,
+    "facing": 90,
     "sunriseSunset": {
       "dataset": "A-B0062-001"
     }
@@ -461,6 +481,7 @@ const SURF_SPOTS = [
     },
     "lat": 22.9655,
     "lon": 121.3055,
+    "facing": 60,
     "sunriseSunset": {
       "dataset": "A-B0062-001"
     }
@@ -487,6 +508,7 @@ const SURF_SPOTS = [
     },
     "lat": 22.9455,
     "lon": 121.2855,
+    "facing": 110,
     "sunriseSunset": {
       "dataset": "A-B0062-001"
     }
@@ -1130,7 +1152,7 @@ async function fetchBuoyObservation(stationId) {
       result.wavePeriod = (we.WavePeriod !== "None" && parseFloat(we.WavePeriod) >= 0) ? `${we.WavePeriod}s` : null;
 
       // Tide Data
-      // Note: TideHeight is often "None" for buoys, but we check it as requested.
+      // Note:TideHeight is often "None" for buoys, but we check it as requested.
       // TideLevel might be "-" or a value.
       const tide = we.TideHeight;
       result.tideHeight = (tide && tide !== "None" && tide !== "-" && !isNaN(parseFloat(tide))) ? tide : null;
@@ -1223,13 +1245,48 @@ async function fetchSunriseSunset(countyName) {
   }
 }
 
+/**
+ * Calculate distance between two coordinates using Haversine formula
+ * Returns distance in kilometers
+ */
+function haversineDistance(lat1, lon1, lat2, lon2) {
+  const R = 6371; // Earth's radius in kilometers
+  const dLat = (lat2 - lat1) * Math.PI / 180;
+  const dLon = (lon2 - lon1) * Math.PI / 180;
+  const a =
+    Math.sin(dLat / 2) * Math.sin(dLat / 2) +
+    Math.cos(lat1 * Math.PI / 180) * Math.cos(lat2 * Math.PI / 180) *
+    Math.sin(dLon / 2) * Math.sin(dLon / 2);
+  const c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
+  return R * c;
+}
+
 function findNearestSpot(lat, lon) {
-  let nearest = SURF_SPOTS[0];
+  // 只在真正的衝浪浪點中查找(與前端列表一致)
+  // 排除那些只是城市名稱的浪點(如:新竹、台中、高雄等)
+  const ACTUAL_SURF_SPOTS_IDS = [
+    'baishawan_shimen', 'zhongjiao', 'fulong', 'daxi', 'waiao', 'yilan', 'suao',
+    'zhunan', 'songbo', 'yuguang', 'qijin', 'nanwan', 'dawan_kenting',
+    'baisha_kenting', 'jialeshui', 'gangkou', 'donghe', 'jinzung'
+  ];
+
+  const surfSpots = SURF_SPOTS.filter(spot => ACTUAL_SURF_SPOTS_IDS.includes(spot.id));
+
+  let nearest = surfSpots[0];
   let minDistance = Infinity;
-  SURF_SPOTS.forEach((spot) => {
-    const dist = Math.sqrt(Math.pow(spot.lat - lat, 2) + Math.pow(spot.lon - lon, 2));
-    if (dist < minDistance) { minDistance = dist; nearest = spot; }
+
+  console.log(`🔍 Finding nearest surf spot for coordinates: ${lat}, ${lon}`);
+
+  surfSpots.forEach((spot) => {
+    const dist = haversineDistance(lat, lon, spot.lat, spot.lon);
+    console.log(`   - ${spot.name}: ${dist.toFixed(2)} km`);
+    if (dist < minDistance) {
+      minDistance = dist;
+      nearest = spot;
+    }
   });
+
+  console.log(`✅ Nearest surf spot: ${nearest.name} (${minDistance.toFixed(2)} km away)`);
   return nearest;
 }
 
@@ -1304,11 +1361,39 @@ const getWeather = async (req, res) => {
       targetSpot.windStationId ? fetchBuoyObservation(targetSpot.windStationId) : null
     ]);
 
-    // Process Tide Forecast to get "Current" (Next Event) and Tide Height
+    // Process Tide Forecast to get High Tide and Low Tide times
     let currentTideHeight = "--";
+    let highTideTime = "--";  // 滿潮時間
+    let lowTideTime = "--";   // 乾潮時間
+
     if (tideForecasts && Array.isArray(tideForecasts) && tideForecasts.length > 0) {
       const now = new Date();
-      // Find first event in the future
+
+      // Find next high tide (滿潮)
+      const nextHighTide = tideForecasts.find(t =>
+        new Date(t.DateTime) > now && t.Tide === "滿潮"
+      );
+      if (nextHighTide) {
+        highTideTime = new Date(nextHighTide.DateTime).toLocaleTimeString('zh-TW', {
+          hour: '2-digit',
+          minute: '2-digit',
+          hour12: false
+        });
+      }
+
+      // Find next low tide (乾潮)
+      const nextLowTide = tideForecasts.find(t =>
+        new Date(t.DateTime) > now && t.Tide === "乾潮"
+      );
+      if (nextLowTide) {
+        lowTideTime = new Date(nextLowTide.DateTime).toLocaleTimeString('zh-TW', {
+          hour: '2-digit',
+          minute: '2-digit',
+          hour12: false
+        });
+      }
+
+      // Keep the original tideLevel for backward compatibility (next event)
       const nextEvent = tideForecasts.find(t => new Date(t.DateTime) > now);
       if (nextEvent) {
         const timeStr = new Date(nextEvent.DateTime).toLocaleTimeString('zh-TW', { hour: '2-digit', minute: '2-digit', hour12: false });
@@ -1373,6 +1458,163 @@ const getWeather = async (req, res) => {
       });
     }
 
+    // === Generate Wind Analysis Narrative ===
+    let windNarrative = "風況資訊不足,無法分析。";
+    let windType = "unknown";
+    let windQuality = "--";
+
+    // Parse wind speed (remove "km/h" and convert to number)
+    const windSpeedNum = windObservation?.windSpeed
+      ? parseFloat(windObservation.windSpeed.replace(/[^\d.-]/g, ''))
+      : (forecasts[0]?.windSpeed ? parseFloat(forecasts[0].windSpeed.replace(/[^\d.-]/g, '')) : 0);
+
+    // Generate narrative if we have wind direction and beach facing
+    if ((windObservation?.windDir || forecasts[0]?.windDir) && targetSpot.facing !== undefined) {
+      const windDirText = windObservation?.windDir || forecasts[0]?.windDir || "--";
+      windNarrative = generateWindNarrative(windDirText, windSpeedNum, targetSpot.facing);
+
+      // Get wind type for emoji reference
+      const windAnalysis = analyzeWind(windDirText, windSpeedNum, targetSpot.facing);
+      windType = windAnalysis.type;
+      windQuality = getWindQualityText(windType);
+    }
+
+    // === Generate Wave Analysis Narrative ===
+    let waveNarrative = "浪況資訊不足,無法分析。";
+
+    // Parse wave height and period
+    const waveHeight = currentWaveHeight !== "--" ? parseFloat(currentWaveHeight.replace(/[^\d.-]/g, '')) : 0;
+    const wavePeriod = currentWavePeriod !== "--" ? parseFloat(currentWavePeriod.replace(/[^\d.-]/g, '')) : 0;
+
+    // Generate wave narrative
+    if (waveHeight > 0 && wavePeriod > 0) {
+      waveNarrative = generateWaveNarrative(waveHeight, wavePeriod);
+    }
+
+    // === Generate Board Suitability Analysis ===
+    let boardSuitability = {
+      longboard: { suitability: 'fair', reasoning: '資訊不足', emoji: '😐' },
+      shortboard: { suitability: 'fair', reasoning: '資訊不足', emoji: '😐' },
+      funboard: { suitability: 'fair', reasoning: '資訊不足', emoji: '😐' },
+      recommended: 'none',
+      recommendedName: '無'
+    };
+
+    // Declare features at broader scope for use in both board suitability and overall assessment
+    let waveFeatures = null;
+    let windFeatures = null;
+    let safetyLevel = 'safe';
+
+    if (waveHeight > 0 && wavePeriod > 0) {
+      // Extract wave features from waveAnalysis module
+      const { categorizePeriod, determinePower } = require("./waveAnalysis");
+
+      const periodInfo = categorizePeriod(wavePeriod);
+      const power = determinePower(waveHeight, wavePeriod);
+
+      // Categorize wave size
+      let size = 'flat';
+      if (waveHeight < 0.2) size = 'flat';
+      else if (waveHeight < 0.4) size = 'ankle';
+      else if (waveHeight < 0.6) size = 'knee';
+      else if (waveHeight < 0.8) size = 'thigh';
+      else if (waveHeight < 1.0) size = 'waist';
+      else if (waveHeight < 1.3) size = 'chest';
+      else if (waveHeight < 1.6) size = 'shoulder';
+      else if (waveHeight < 2.0) size = 'head';
+      else if (waveHeight < 2.5) size = 'overhead';
+      else size = 'double-overhead';
+
+      waveFeatures = {
+        power: power === '軟弱' ? 'weak' : power === '普通' ? 'moderate' : power === '有力' ? 'solid' : power === '強勁' ? 'heavy' : 'dangerous',
+        size: size,
+        period: periodInfo.type
+      };
+
+      // Extract wind features based on wind type and speed
+      let windTexture = 'clean';
+      let windStrength = 'light';
+
+      // Determine texture based on wind type and speed
+      if (windType === 'offshore') {
+        if (windSpeedNum < 5) windTexture = 'glassy';
+        else if (windSpeedNum < 20) windTexture = 'clean';
+        else if (windSpeedNum < 30) windTexture = 'textured';
+        else windTexture = 'blown-out';
+      } else if (windType === 'onshore') {
+        if (windSpeedNum < 8) windTexture = 'glassy';
+        else if (windSpeedNum < 15) windTexture = 'textured';
+        else if (windSpeedNum < 25) windTexture = 'choppy';
+        else windTexture = 'blown-out';
+      } else { // cross-shore
+        if (windSpeedNum < 10) windTexture = 'clean';
+        else if (windSpeedNum < 20) windTexture = 'textured';
+        else if (windSpeedNum < 30) windTexture = 'choppy';
+        else windTexture = 'blown-out';
+      }
+
+      // Determine strength
+      if (windSpeedNum < 5) windStrength = 'calm';
+      else if (windSpeedNum < 15) windStrength = 'light';
+      else if (windSpeedNum < 25) windStrength = 'moderate';
+      else if (windSpeedNum < 35) windStrength = 'strong';
+      else windStrength = 'dangerous';
+
+      windFeatures = {
+        texture: windTexture,
+        strength: windStrength
+      };
+
+      // Determine safety level (simplified - based on wind strength and wave power)
+      if (windStrength === 'dangerous' || waveFeatures.power === 'dangerous') {
+        safetyLevel = 'danger';
+      } else if (windStrength === 'strong' || waveFeatures.power === 'heavy') {
+        safetyLevel = 'warning';
+      }
+
+      boardSuitability = analyzeBoardSuitability(waveFeatures, windFeatures, safetyLevel);
+    }
+
+
+    // === Generate Overall Assessment ===
+    let overallAssessment = '綜合評估資訊不足。';
+
+    if (waveHeight > 0 && wavePeriod > 0 && waveFeatures && windFeatures) {
+      // Determine wind impact
+      let windImpact = 'neutral';
+      if (windType === 'offshore' && windSpeedNum < 20) {
+        windImpact = 'positive';
+      } else if (windType === 'onshore' && windSpeedNum > 15) {
+        windImpact = 'negative';
+      }
+
+      // Update wind features with impact
+      const windFeaturesWithImpact = {
+        ...windFeatures,
+        impact: windImpact
+      };
+
+      // Determine safety concerns
+      const safetyConcerns = [];
+      if (windFeatures.strength === 'dangerous') {
+        safetyConcerns.push('危險風速');
+      }
+      if (waveFeatures.power === 'dangerous') {
+        safetyConcerns.push('危險浪況');
+      }
+      if (windFeatures.strength === 'strong') {
+        safetyConcerns.push('強風');
+      }
+
+      overallAssessment = generateOverallAssessment(
+        waveFeatures,
+        windFeaturesWithImpact,
+        safetyLevel,
+        safetyConcerns
+      );
+    }
+
+
     // Consolidate Current Weather
     const current = {
       startTime: forecasts[0]?.startTime || new Date().toISOString(),
@@ -1381,14 +1623,22 @@ const getWeather = async (req, res) => {
       rain: forecasts[0]?.rain || "0%",
       windSpeed: windObservation?.windSpeed || forecasts[0]?.windSpeed || "--",
       windDir: windObservation?.windDir || forecasts[0]?.windDir || "--",
+      windNarrative: windNarrative,  // 新增：自然語言風況描述
+      windType: windType,              // 新增：風型 (offshore/onshore/cross-shore)
+      windQuality: windQuality,        // 新增：風況品質 (優/普通/差)
       waveHeight: currentWaveHeight,
       waveDir: currentWaveDir,
       wavePeriod: currentWavePeriod,
+      waveNarrative: waveNarrative,    // 新增：自然語言浪況描述
       tideLevel: currentTideLevel, // Prioritized Tide (Forecast Next Event)
       tideHeight: currentTideHeight, // Tide Height from F-A0021-001
       seaTemp: currentSeaTemp, // Sea Temperature from Buoy Observations
+      highTideTime: highTideTime,  // 滿潮時間（僅時間）
+      lowTideTime: lowTideTime,    // 乾潮時間（僅時間） F-A0021-001
       windSource: windObservation ? `Observation (${targetSpot.windStationId})` : "Forecast (F-D0047)",
-      waveSource: waveSource
+      waveSource: waveSource,
+      boardSuitability: boardSuitability,  // 新增：板型適用性分析
+      overallAssessment: overallAssessment  // 新增：綜合評估
     };
 
     console.log(`✅ Success: ${targetSpot.name}`);
@@ -1431,8 +1681,11 @@ const getWeather = async (req, res) => {
     res.json({
       success: true,
       city: targetSpot.name,
+      spotId: targetSpot.id,  // 新增：返回浪點 ID 給前端
       data: {
         city: targetSpot.name,
+        spotId: targetSpot.id,  // 新增：在 data 中也包含 spotId
+        facing: targetSpot.facing || 0,  // 海灘朝向
         current: current,
         seaTemp: current.seaTemp,
         currentTide: current.tideLevel,
