@@ -58,8 +58,8 @@ const SURF_SPOTS = [
   {
     "name": "中角灣（金山）",
     "id": "zhongjiao_bay",
-    "primaryWaveStationId": "C6AH2",
-    "secondaryWaveStationId": "TPBU01",
+    "primaryWaveStationId": "TPBU01",
+    "secondaryWaveStationId": "C6AH2",
     "windStationId": "C6AH2",
     "tide": {
       "dataset": "F-A0021-001",
@@ -85,8 +85,8 @@ const SURF_SPOTS = [
   {
     "name": "福隆海水浴場",
     "id": "fulong",
-    "primaryWaveStationId": "OAC005",
-    "secondaryWaveStationId": "46694A",
+    "primaryWaveStationId": "46694A",
+    "secondaryWaveStationId": "OAC005",
     "windStationId": "46694A",
     "tide": {
       "dataset": "F-A0021-001",
@@ -112,8 +112,8 @@ const SURF_SPOTS = [
   {
     "name": "蜜月灣（大溪）",
     "id": "honeymoon_bay",
-    "primaryWaveStationId": "OAC005",
-    "secondaryWaveStationId": "46708A",
+    "primaryWaveStationId": "46708A",
+    "secondaryWaveStationId": "OAC005",
     "windStationId": "46694A",
     "tide": {
       "dataset": "F-A0021-001",
@@ -193,8 +193,8 @@ const SURF_SPOTS = [
   {
     "name": "無尾港",
     "id": "wuwei",
-    "primaryWaveStationId": "46706A",
-    "secondaryWaveStationId": "46708A",
+    "primaryWaveStationId": "46708A",
+    "secondaryWaveStationId": "46706A",
     "windStationId": "46708A",
     "tide": {
       "dataset": "F-A0021-001",
@@ -220,8 +220,8 @@ const SURF_SPOTS = [
   {
     "name": "假日之森（竹南）",
     "id": "holiday_forest",
-    "primaryWaveStationId": "C6D01",
-    "secondaryWaveStationId": "46757B",
+    "primaryWaveStationId": "46757B",
+    "secondaryWaveStationId": "C6D01",
     "windStationId": "46757B",
     "tide": {
       "dataset": "F-A0021-001",
@@ -247,8 +247,8 @@ const SURF_SPOTS = [
   {
     "name": "松柏港沙灘",
     "id": "songbo",
-    "primaryWaveStationId": "C6F01",
-    "secondaryWaveStationId": "46757B",
+    "primaryWaveStationId": "46757B",
+    "secondaryWaveStationId": "C6F01",
     "windStationId": "46757B",
     "tide": {
       "dataset": "F-A0021-001",
@@ -274,8 +274,8 @@ const SURF_SPOTS = [
   {
     "name": "漁光島",
     "id": "yuguangdao",
-    "primaryWaveStationId": "C6N01",
-    "secondaryWaveStationId": "COMC08",
+    "primaryWaveStationId": "COMC08",
+    "secondaryWaveStationId": "C6N01",
     "windStationId": "COMC08",
     "tide": {
       "dataset": "F-A0021-001",
@@ -327,8 +327,8 @@ const SURF_SPOTS = [
   {
     "name": "南灣",
     "id": "nanwan",
-    "primaryWaveStationId": "OAC007",
-    "secondaryWaveStationId": "46759A",
+    "primaryWaveStationId": "46759A",
+    "secondaryWaveStationId": "OAC007",
     "windStationId": "46759A",
     "tide": {
       "dataset": "F-A0021-001",
@@ -354,8 +354,8 @@ const SURF_SPOTS = [
   {
     "name": "墾丁大灣",
     "id": "dawan_kenting",
-    "primaryWaveStationId": "OAC007",
-    "secondaryWaveStationId": "46759A",
+    "primaryWaveStationId": "46759A",
+    "secondaryWaveStationId": "OAC007",
     "windStationId": "46759A",
     "tide": {
       "dataset": "F-A0021-001",
@@ -381,8 +381,8 @@ const SURF_SPOTS = [
   {
     "name": "墾丁白砂灣",
     "id": "baisha_kenting",
-    "primaryWaveStationId": "OAC007",
-    "secondaryWaveStationId": "46759A",
+    "primaryWaveStationId": "46759A",
+    "secondaryWaveStationId": "OAC007",
     "windStationId": "46759A",
     "tide": {
       "dataset": "F-A0021-001",
@@ -408,8 +408,8 @@ const SURF_SPOTS = [
   {
     "name": "佳樂水",
     "id": "jialeshui",
-    "primaryWaveStationId": "OAC007",
-    "secondaryWaveStationId": "46759A",
+    "primaryWaveStationId": "46759A",
+    "secondaryWaveStationId": "OAC007",
     "windStationId": "46759A",
     "tide": {
       "dataset": "F-A0021-001",
@@ -462,8 +462,8 @@ const SURF_SPOTS = [
   {
     "name": "東河",
     "id": "donghe",
-    "primaryWaveStationId": "WRA007",
-    "secondaryWaveStationId": "46761F",
+    "primaryWaveStationId": "46761F",
+    "secondaryWaveStationId": "WRA007",
     "windStationId": "46761F",
     "tide": {
       "dataset": "F-A0021-001",
@@ -489,8 +489,8 @@ const SURF_SPOTS = [
   {
     "name": "金樽",
     "id": "jinzung",
-    "primaryWaveStationId": "WRA007",
-    "secondaryWaveStationId": "46761F",
+    "primaryWaveStationId": "46761F",
+    "secondaryWaveStationId": "WRA007",
     "windStationId": "46761F",
     "tide": {
       "dataset": "F-A0021-001",
@@ -516,8 +516,8 @@ const SURF_SPOTS = [
   {
     "name": "台東",
     "id": "taitung",
-    "primaryWaveStationId": "WRA007",
-    "secondaryWaveStationId": "46761F",
+    "primaryWaveStationId": "46761F",
+    "secondaryWaveStationId": "WRA007",
     "windStationId": "46761F",
     "tide": {
       "dataset": "F-A0021-001",
