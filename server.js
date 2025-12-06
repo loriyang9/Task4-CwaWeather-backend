@@ -289,7 +289,7 @@ const SURF_SPOTS = [
     },
     "forecast": {
       "datasetId": "F-A0012-001",
-      "locationName": "安平"
+      "locationName": "安平港"
     },
     "lat": 22.9855,
     "lon": 120.1555,
@@ -595,34 +595,7 @@ const SURF_SPOTS = [
       "dataset": "A-B0062-001"
     }
   },
-  {
-    "name": "旗津",
-    "id": "cijin",
-    "marine": {
-      "dataset": "O-MMC-0001",
-      "stationId": "46744A",
-      "name": "高雄浮標"
-    },
-    "tide": {
-      "dataset": "F-A0021-001",
-      "stationId": "12022010",
-      "name": "高雄"
-    },
-    "weather": {
-      "datasetId": "F-D0047-065",
-      "locationName": "旗津區",
-      "desc": "高雄市"
-    },
-    "forecast": {
-      "datasetId": "F-A0012-001",
-      "locationName": "高雄"
-    },
-    "lat": 22.6055,
-    "lon": 120.2755,
-    "sunriseSunset": {
-      "dataset": "A-B0062-001"
-    }
-  },
+
   {
     "name": "台南",
     "id": "tainan",
@@ -1085,8 +1058,9 @@ async function fetchWeatherData(datasetId, locationName) {
 async function fetchBuoyObservation(stationId) {
   if (!stationId) return null;
   try {
-    const url = `https://opendata.cwa.gov.tw/api/v1/rest/datastore/O-B0075-001?Authorization=${CWA_API_KEY}&StationID=${stationId}`;
-    console.log(`Fetching Buoy Observation (O-B0075-001): ${url}`);
+    // 改為不指定 StationID，直接抓全部資料再過濾 (因為 API 的 StationID 篩選功能壞了)
+    const url = `https://opendata.cwa.gov.tw/api/v1/rest/datastore/O-B0075-001?Authorization=${CWA_API_KEY}`;
+    console.log(`Fetching Buoy Observation (O-B0075-001): ${url} (Filtering for ${stationId} locally)`);
     const response = await axios.get(url);
 
     const data = response.data;
