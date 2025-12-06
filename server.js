@@ -1265,9 +1265,9 @@ function findNearestSpot(lat, lon) {
   // 只在真正的衝浪浪點中查找(與前端列表一致)
   // 排除那些只是城市名稱的浪點(如:新竹、台中、高雄等)
   const ACTUAL_SURF_SPOTS_IDS = [
-    'baishawan_shimen', 'zhongjiao', 'fulong', 'daxi', 'waiao', 'yilan', 'suao',
-    'zhunan', 'songbo', 'yuguang', 'qijin', 'nanwan', 'dawan_kenting',
-    'baisha_kenting', 'jialeshui', 'gangkou', 'donghe', 'jinzung'
+    'baishawan_shimen', 'zhongjiao_bay', 'fulong', 'honeymoon_bay', 'waiao', 'wushi', 'wuwei',
+    'holiday_forest', 'songbo', 'yuguangdao', 'qijin', 'nanwan', 'dawan_kenting',
+    'baisha_kenting', 'jialeshui', 'gangkou', 'donghe', 'jinzung', 'taitung'
   ];
 
   const surfSpots = SURF_SPOTS.filter(spot => ACTUAL_SURF_SPOTS_IDS.includes(spot.id));
