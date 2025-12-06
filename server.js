@@ -2,6 +2,8 @@ require("dotenv").config();
 const express = require("express");
 const cors = require("cors");
 const axios = require("axios");
+const WaveForecastCache = require("./WaveForecastCache");
+const WAVE_FORECAST_MAPPING = require("./wave_location_mapping");
 
 const app = express();
 const PORT = process.env.PORT || 3000;
@@ -15,6 +17,9 @@ if (!CWA_API_KEY) {
 
 app.use(cors());
 app.use(express.json());
+
+// Initialize Wave Forecast Cache
+const waveForecastCache = new WaveForecastCache(CWA_API_KEY);
 
 // === 衝浪浪點資料庫 (User Provided) ===
 const SURF_SPOTS = [
@@ -1393,6 +1398,36 @@ const getWeather = async (req, res) => {
     console.log(`   Current Wave Height: ${current.waveHeight}`);
     console.log(`   Current Tide Level: ${current.tideLevel}`);
 
+    // ===  6. Fetch Wave Forecast from M-B0078-001 ===
+    // User Request: 1. M-B0078-001 -> 2. "--"
+    let waveForecasts = [];
+
+    try {
+      // Get LocationCode for this surf spot
+      const waveForecastLocationCode = WAVE_FORECAST_MAPPING[targetSpot.id];
+
+      if (waveForecastLocationCode) {
+        console.log(`Fetching wave forecast for ${waveForecastLocationCode}`);
+        const forecasts = await waveForecastCache.getNextForecasts(waveForecastLocationCode, 24);
+
+        // Format wave forecasts
+        waveForecasts = forecasts.map(f => ({
+          time: f.DateTime,
+          waveHeight: f.SignificantWaveHeight ? `${f.SignificantWaveHeight}m` : "--",
+          waveDir: f.WaveDirectionForecast || "--",
+          wavePeriod: f.WavePeriod ? `${f.WavePeriod}s` : "--",
+          currentDir: f.OceanCurrentDirectionForecast || "--",
+          currentSpeed: f.OceanCurrentSpeed ? `${f.OceanCurrentSpeed}m/s` : "--"
+        }));
+
+        console.log(`   Wave Forecasts: ${waveForecasts.length} entries`);
+      } else {
+        console.log(`   No wave forecast location mapping for ${targetSpot.id}`);
+      }
+    } catch (error) {
+      console.error(`Wave forecast error for ${targetSpot.id}:`, error.message);
+    }
+
     res.json({
       success: true,
       city: targetSpot.name,
@@ -1404,6 +1439,7 @@ const getWeather = async (req, res) => {
         windSource: current.windSource,
         tideForecasts: tideForecasts,
         forecasts: forecasts,
+        waveForecasts: waveForecasts,  // New: M-B0078-001 wave forecasts
         sunrise: sunriseData?.sunrise || "--",
         sunset: sunriseData?.sunset || "--"
       }
