@@ -9,7 +9,9 @@ Testing baishawan_shimen...
    Current Wave Height: 1.5m
    Current Wave Dir: 東北東
    Current Wave Period: 6.0s
-   Current Tide Level: 乾潮 04:49
+   Current Tide Level: 乾潮 02:58
+   Current Tide Height: -132cm
+   Current Sea Temperature: 21.3°C
 [Forecast 0] Full Object: {"startTime":"2025-12-05T17:00:00+08:00","temp":"18","windSpeed":"18 km/h","windDir":"偏東風","rain":"20%","weather":"陰"}
 [Forecast 1] Full Object: {"startTime":"2025-12-05T20:00:00+08:00","temp":"18","windSpeed":"14 km/h","windDir":"東北風","rain":"30%","weather":"短暫雨"}
 [Forecast 2] Full Object: {"startTime":"2025-12-05T23:00:00+08:00","temp":"18","windSpeed":"11 km/h","windDir":"東北風","rain":"20%","weather":"陰"}
@@ -24,6 +26,8 @@ Testing waiao...
    Current Wave Dir: 北北東
    Current Wave Period: 5.6s
    Current Tide Level: 滿潮 01:03
+   Current Tide Height: 0cm
+   Current Sea Temperature: 23.5°C
 [Forecast 0] Full Object: {"startTime":"2025-12-05T17:00:00+08:00","temp":"17","windSpeed":"7 km/h","windDir":"東北風","rain":"70%","weather":"短暫雨"}
 [Forecast 1] Full Object: {"startTime":"2025-12-05T20:00:00+08:00","temp":"16","windSpeed":"7 km/h","windDir":"東北風","rain":"70%","weather":"短暫雨"}
 [Forecast 2] Full Object: {"startTime":"2025-12-05T23:00:00+08:00","temp":"16","windSpeed":"4 km/h","windDir":"偏西風","rain":"20%","weather":"陰"}
@@ -38,6 +42,8 @@ Testing nanwan...
    Current Wave Dir: 東南
    Current Wave Period: 6.5s
    Current Tide Level: 乾潮 06:09
+   Current Tide Height: -37cm
+   Current Sea Temperature: 25.6°C
 [Forecast 0] Full Object: {"startTime":"2025-12-05T17:00:00+08:00","temp":"19","windSpeed":"11 km/h","windDir":"東北風","rain":"20%","weather":"晴"}
 [Forecast 1] Full Object: {"startTime":"2025-12-05T20:00:00+08:00","temp":"19","windSpeed":"11 km/h","windDir":"東北風","rain":"20%","weather":"多雲"}
 [Forecast 2] Full Object: {"startTime":"2025-12-05T23:00:00+08:00","temp":"19","windSpeed":"11 km/h","windDir":"東北風","rain":"20%","weather":"晴"}
@@ -51,7 +57,9 @@ Testing taitung...
    Current Wave Height: 1.4m
    Current Wave Dir: 東
    Current Wave Period: 6.4s
-   Current Tide Level: 乾潮 02:35
+   Current Tide Level: 乾潮 03:54
+   Current Tide Height: -47cm
+   Current Sea Temperature: 25.4°C
 [Forecast 0] Full Object: {"startTime":"2025-12-05T17:00:00+08:00","temp":"19","windSpeed":"7 km/h","windDir":"偏北風","rain":"20%","weather":"多雲"}
 [Forecast 1] Full Object: {"startTime":"2025-12-05T20:00:00+08:00","temp":"18","windSpeed":"11 km/h","windDir":"偏北風","rain":"20%","weather":"多雲"}
 [Forecast 2] Full Object: {"startTime":"2025-12-05T23:00:00+08:00","temp":"18","windSpeed":"7 km/h","windDir":"西北風","rain":"20%","weather":"晴"}

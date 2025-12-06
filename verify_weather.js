@@ -23,6 +23,8 @@ async function verifyWeather() {
                     console.log(`   Current Wave Dir: ${res.data.data.current.waveDir}`);
                     console.log(`   Current Wave Period: ${res.data.data.current.wavePeriod}`);
                     console.log(`   Current Tide Level: ${res.data.data.current.tideLevel}`);
+                    console.log(`   Current Tide Height: ${res.data.data.current.tideHeight}`);
+                    console.log(`   Current Sea Temperature: ${res.data.data.current.seaTemp}`);
 
                     // Print first 3 forecasts
                     forecasts.slice(0, 3).forEach((f, i) => {

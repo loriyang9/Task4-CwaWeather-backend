@@ -1129,6 +1129,10 @@ async function fetchBuoyObservation(stationId) {
       // TideLevel might be "-" or a value.
       const tide = we.TideHeight;
       result.tideHeight = (tide && tide !== "None" && tide !== "-" && !isNaN(parseFloat(tide))) ? tide : null;
+
+      // Sea Temperature
+      const seaTemp = we.SeaTemperature;
+      result.seaTemp = (seaTemp && seaTemp !== "None" && seaTemp !== "-" && !isNaN(parseFloat(seaTemp))) ? `${seaTemp}°C` : null;
     }
 
     return result;
@@ -1295,7 +1299,8 @@ const getWeather = async (req, res) => {
       targetSpot.windStationId ? fetchBuoyObservation(targetSpot.windStationId) : null
     ]);
 
-    // Process Tide Forecast to get "Current" (Next Event)
+    // Process Tide Forecast to get "Current" (Next Event) and Tide Height
+    let currentTideHeight = "--";
     if (tideForecasts && Array.isArray(tideForecasts) && tideForecasts.length > 0) {
       const now = new Date();
       // Find first event in the future
@@ -1303,7 +1308,22 @@ const getWeather = async (req, res) => {
       if (nextEvent) {
         const timeStr = new Date(nextEvent.DateTime).toLocaleTimeString('zh-TW', { hour: '2-digit', minute: '2-digit', hour12: false });
         currentTideLevel = `${nextEvent.Tide} ${timeStr}`;
+
+        // Extract tide height from the next event
+        // TideHeights can have AboveTWVD, AboveLocalMSL, or AboveChartDatum
+        if (nextEvent.TideHeights && nextEvent.TideHeights.AboveLocalMSL !== undefined) {
+          currentTideHeight = `${nextEvent.TideHeights.AboveLocalMSL}cm`;
+        }
       }
+    }
+
+    // 5. Resolve Sea Temperature (From Buoy Observations)
+    // User Request: 1. Primary Buoy -> 2. Secondary Buoy -> 3. "--"
+    let currentSeaTemp = "--";
+    if (primaryObs && primaryObs.seaTemp) {
+      currentSeaTemp = primaryObs.seaTemp;
+    } else if (secondaryObs && secondaryObs.seaTemp) {
+      currentSeaTemp = secondaryObs.seaTemp;
     }
 
     // Process Weather Data (Township)
@@ -1360,6 +1380,8 @@ const getWeather = async (req, res) => {
       waveDir: currentWaveDir,
       wavePeriod: currentWavePeriod,
       tideLevel: currentTideLevel, // Prioritized Tide (Forecast Next Event)
+      tideHeight: currentTideHeight, // Tide Height from F-A0021-001
+      seaTemp: currentSeaTemp, // Sea Temperature from Buoy Observations
       windSource: windObservation ? `Observation (${targetSpot.windStationId})` : "Forecast (F-D0047)",
       waveSource: waveSource
     };
