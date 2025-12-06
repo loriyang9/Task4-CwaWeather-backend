@@ -293,6 +293,7 @@ const SURF_SPOTS = [
     },
     "lat": 22.9855,
     "lon": 120.1555,
+    "facing": 270,
     "sunriseSunset": {
       "dataset": "A-B0062-001"
     }
@@ -597,57 +598,7 @@ const SURF_SPOTS = [
   },
 
   {
-    "name": "台南",
-    "id": "tainan",
-    "marine": {
-      "dataset": "O-MMC-0001",
-      "stationId": "46741A",
-      "name": "安平浮標"
-    },
-    "tide": {
-      "dataset": "F-A0021-001",
-      "stationId": "12022010",
-      "name": "高雄"
-    },
-    "weather": {
-      "datasetId": "F-D0047-073",
-      "locationName": "安平區",
-      "desc": "臺南市"
-    },
-    "forecast": {
-      "datasetId": "F-A0012-001",
-      "locationName": "安平"
-    },
-    "lat": 22.9955,
-    "lon": 120.1555,
-    "sunriseSunset": {
-      "dataset": "A-B0062-001"
-    }
-  },
-  {
-    "name": "漁光島",
-    "id": "yuguang",
-    "marine": {
-      "dataset": "O-MMC-0001",
-      "stationId": "46741A",
-      "name": "安平浮標"
-    },
-    "tide": {
-      "dataset": "F-A0021-001",
-      "stationId": "I00500",
-      "name": "漁港安平"
-    },
-    "weather": {
-      "datasetId": "F-D0047-073",
-      "locationName": "安平區",
-      "desc": "臺南市"
-    },
-    "forecast": {
-      "datasetId": "F-A0012-001",
-      "locationName": "安平"
-    },
-    "lat": 22.9855,
-    "lon": 120.1555,
+
     "sunriseSunset": {
       "dataset": "A-B0062-001"
     }
