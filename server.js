@@ -23,6 +23,11 @@ if (!CWA_API_KEY) {
 app.use(cors());
 app.use(express.json());
 
+app.get('/', (req, res) => {
+  res.send('Server is running! 🏄‍♂️');
+});
+
+
 // Initialize Wave Forecast Cache
 const waveForecastCache = new WaveForecastCache(CWA_API_KEY);
 

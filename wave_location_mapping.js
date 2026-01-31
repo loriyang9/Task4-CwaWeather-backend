@@ -16,7 +16,7 @@ const WAVE_FORECAST_MAPPING = {
 
     // 南部
     "yuguangdao": "I00500",  // 漁光島 - I00500 (安平，可能需要確認)
-    "cijin": null,  // 旗津海水浴場 - 無直接對應
+    "qijin": "B00800",  // 旗津海水浴場 - B00800 高雄港旗后山一港口護岸 (closest match)
     "nanwan": "O00700",  // 南灣 - O00700 南灣
     "dawan_kenting": "O00800",  // 墾丁大灣 - O00800 大灣
     "baisha_kenting": "O00600",  // 墾丁白砂灣 - O00600 白砂
